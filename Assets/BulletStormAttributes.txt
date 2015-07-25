@@ -1,0 +1,140 @@
+	public enum TurretType {
+		gun,
+		sword,
+		glue,
+		gas,
+		flamethrower,
+		machinegun,
+		artillery,
+		missile,
+		blazeMachineGun,
+		photon
+	};
+
+	public enum AttributeType {
+		minDamage,
+		maxDamage,
+		frequency,
+		range,
+		price,
+		burstLength,
+		level
+	};
+
+	static Dictionary<TurretType, Dictionary<AttributeType, float>> attributesList = new Dictionary<TurretType, Dictionary<AttributeType, float>>(){
+		{
+			TurretType.gun, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 5f},
+				{AttributeType.maxDamage, 5f},
+				{AttributeType.frequency, 3f},
+				{AttributeType.range, 50f},
+				{AttributeType.price, 40f},
+				{AttributeType.level, 1}
+			}
+		},
+
+		{
+			TurretType.sword, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 10f},
+				{AttributeType.maxDamage, 15f},
+				{AttributeType.frequency, 2f},
+				{AttributeType.range, 2f},
+				{AttributeType.price, 45f},
+				{AttributeType.level, 1}
+			}
+		},
+
+		{
+			TurretType.glue, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 5f},
+				{AttributeType.maxDamage, 5f},
+				{AttributeType.frequency, 5f},
+				{AttributeType.range, 5f},
+				{AttributeType.price, 5f},
+				{AttributeType.level, 2}
+			}
+		},
+
+		{
+			TurretType.gas, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 5f},
+				{AttributeType.maxDamage, 5f},
+				{AttributeType.frequency, 5f},
+				{AttributeType.range, 5f},
+				{AttributeType.price, 5f},
+				{AttributeType.level, 2}
+			}
+		},
+
+		{
+			TurretType.flamethrower, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 5f},
+				{AttributeType.maxDamage, 5f},
+				{AttributeType.frequency, 5f},
+				{AttributeType.range, 5f},
+				{AttributeType.price, 70f},
+				{AttributeType.burstLength, 3f},
+				{AttributeType.level, 3}
+			}
+		},
+
+		{
+			TurretType.machinegun, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 4f},
+				{AttributeType.maxDamage, 6f},
+				{AttributeType.range, 55f},
+				{AttributeType.price, 85f},
+				{AttributeType.level, 3}
+			}
+		},
+
+		{
+			TurretType.artillery, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 13f},
+				{AttributeType.maxDamage, 18f},
+				{AttributeType.frequency, 5f},
+				{AttributeType.range, 75f},
+				{AttributeType.price, 90f},
+				{AttributeType.level, 4}
+			}
+		},
+
+		{
+			TurretType.missile, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 20f},
+				{AttributeType.maxDamage, 20f},
+				{AttributeType.frequency, 4f},
+				{AttributeType.range, 70f},
+				{AttributeType.price, 90f},
+				{AttributeType.level, 4}
+			}
+		},
+
+		{
+			TurretType.blazeMachineGun, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 10f},
+				{AttributeType.maxDamage, 20f},
+				{AttributeType.frequency, 0.08f},
+				{AttributeType.range, 65f},
+				{AttributeType.price, 100f},
+				{AttributeType.level, 5}
+			}
+		},
+
+		{
+			TurretType.photon, new Dictionary<AttributeType, float>(){
+				{AttributeType.minDamage, 15f},
+				{AttributeType.maxDamage, 30f},
+				{AttributeType.frequency, 0.5f},
+				{AttributeType.range, 5f},
+				{AttributeType.price, 125f},
+				{AttributeType.level, 5}
+			}
+		},
+	};
+
+	static Dictionary<TurretType, string> sprites = new Dictionary<TurretType, string>(){
+		{
+			TurretType.gun, "GunTowerBulletStorm"
+		}
+	};

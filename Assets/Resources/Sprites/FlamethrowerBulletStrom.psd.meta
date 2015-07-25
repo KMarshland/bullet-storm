@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: b2a1b4ddbb6f64a3f89821ff754dcd67
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: FlamethrowerBulletStrom
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -35,6 +37,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: .00100000005
   alphaIsTransparency: 1
   textureType: 8

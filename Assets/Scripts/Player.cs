@@ -51,4 +51,12 @@ public class Player {
 			return supplyIncome;
 		}
 	}
+
+	public Tower CreateTower(Tower.TurretType turretType){
+		return Tower.createTower(turretType, this);
+	}
+
+	public Troop CreateTroop(Troop.TroopType troopType){
+		return Troop.createTroop (troopType, this);
+	}
 }

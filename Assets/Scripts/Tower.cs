@@ -38,7 +38,7 @@ public class Tower : Spritable {
 				{AttributeType.level, 1}
 			}
 		},
-
+		
 		{
 			TurretType.sword, new Dictionary<AttributeType, float>(){
 				{AttributeType.minDamage, 10f},
@@ -49,7 +49,7 @@ public class Tower : Spritable {
 				{AttributeType.level, 1}
 			}
 		},
-
+		
 		{
 			TurretType.glue, new Dictionary<AttributeType, float>(){
 				{AttributeType.minDamage, 5f},
@@ -60,7 +60,7 @@ public class Tower : Spritable {
 				{AttributeType.level, 2}
 			}
 		},
-
+		
 		{
 			TurretType.gas, new Dictionary<AttributeType, float>(){
 				{AttributeType.minDamage, 5f},
@@ -71,72 +71,72 @@ public class Tower : Spritable {
 				{AttributeType.level, 2}
 			}
 		},
-
+		
 		{
 			TurretType.flamethrower, new Dictionary<AttributeType, float>(){
 				{AttributeType.minDamage, 5f},
 				{AttributeType.maxDamage, 5f},
 				{AttributeType.frequency, 5f},
 				{AttributeType.range, 5f},
-				{AttributeType.price, 5f},
+				{AttributeType.price, 70f},
 				{AttributeType.burstLength, 3f},
 				{AttributeType.level, 3}
 			}
 		},
-
+		
 		{
 			TurretType.machinegun, new Dictionary<AttributeType, float>(){
-				{AttributeType.minDamage, 5f},
-				{AttributeType.maxDamage, 5f},
-				{AttributeType.range, 5f},
-				{AttributeType.price, 5f},
+				{AttributeType.minDamage, 4f},
+				{AttributeType.maxDamage, 6f},
+				{AttributeType.range, 55f},
+				{AttributeType.price, 85f},
 				{AttributeType.level, 3}
 			}
 		},
-
+		
 		{
 			TurretType.artillery, new Dictionary<AttributeType, float>(){
-				{AttributeType.minDamage, 5f},
-				{AttributeType.maxDamage, 5f},
+				{AttributeType.minDamage, 13f},
+				{AttributeType.maxDamage, 18f},
 				{AttributeType.frequency, 5f},
-				{AttributeType.range, 5f},
-				{AttributeType.price, 5f},
+				{AttributeType.range, 75f},
+				{AttributeType.price, 90f},
 				{AttributeType.level, 4}
 			}
 		},
-
+		
 		{
 			TurretType.missile, new Dictionary<AttributeType, float>(){
-				{AttributeType.minDamage, 5f},
-				{AttributeType.maxDamage, 5f},
-				{AttributeType.frequency, 5f},
-				{AttributeType.range, 5f},
-				{AttributeType.price, 5f},
+				{AttributeType.minDamage, 20f},
+				{AttributeType.maxDamage, 20f},
+				{AttributeType.frequency, 4f},
+				{AttributeType.range, 70f},
+				{AttributeType.price, 90f},
 				{AttributeType.level, 4}
 			}
 		},
-
+		
 		{
 			TurretType.blazeMachineGun, new Dictionary<AttributeType, float>(){
-				{AttributeType.minDamage, 5f},
-				{AttributeType.maxDamage, 5f},
-				{AttributeType.frequency, 5f},
-				{AttributeType.range, 5f},
-				{AttributeType.price, 5f},
+				{AttributeType.minDamage, 10f},
+				{AttributeType.maxDamage, 20f},
+				{AttributeType.frequency, 0.08f},
+				{AttributeType.range, 65f},
+				{AttributeType.price, 100f},
 				{AttributeType.level, 5}
 			}
 		},
-
+		
 		{
 			TurretType.photon, new Dictionary<AttributeType, float>(){
-				{AttributeType.minDamage, 5f},
-				{AttributeType.maxDamage, 5f},
-				{AttributeType.frequency, 5f},
+				{AttributeType.minDamage, 15f},
+				{AttributeType.maxDamage, 30f},
+				{AttributeType.frequency, 0.5f},
 				{AttributeType.range, 5f},
-				{AttributeType.price, 5f},
+				{AttributeType.price, 125f},
 				{AttributeType.level, 5}
 			}
-		},
+		}
 	};
 
 	static Dictionary<TurretType, string> sprites = new Dictionary<TurretType, string>(){
@@ -147,7 +147,7 @@ public class Tower : Spritable {
 			TurretType.artillery, "ArtilleryBulletStorm"
 		},
 		{
-			TurretType.blazeMachineGun, "GunTowerBulletStorm"//TODO: Get graphic
+			TurretType.blazeMachineGun, "BlazeM.GunBulletStorm"
 		},
 		{
 			TurretType.flamethrower, "FlamethrowerBulletStorm"
@@ -159,13 +159,13 @@ public class Tower : Spritable {
 			TurretType.glue, "GlueTowerBulletStorm"
 		},
 		{
-			TurretType.machinegun, "GunTowerBulletStorm"//TODO: Get graphic
+			TurretType.machinegun, "MachineGunBulletStorm"
 		},
 		{
 			TurretType.missile, "MissileBulletStorm"
 		},
 		{
-			TurretType.photon, "GunTowerBulletStorm"//TODO: Get graphic
+			TurretType.photon, "PhotonCannonBulletStorm"
 		},
 		{
 			TurretType.sword, "SwordTowerBulletStorm"
@@ -191,7 +191,7 @@ public class Tower : Spritable {
 
 	// Use this for initialization
 	void Start () {
-		Projectile.createProjectile(this, new Vector3(5f, 5f, 0f));
+
 	}
 	
 	// Update is called once per frame
@@ -255,9 +255,13 @@ public class Tower : Spritable {
 			return;
 		}
 
-		this.projectiles.Add(Projectile.createProjectile(this, t.transform.position));
+		this.projectiles.Add(createProjectile(t.transform.position));
 
 		ticksSinceFired = 0;
+	}
+
+	Projectile createProjectile(Vector3 dest){
+		return Projectile.createProjectile(this, dest);
 	}
 
 	public TurretType TurretType2 {
@@ -272,10 +276,12 @@ public class Tower : Spritable {
 		}
 	}
 
-	public static void createTower(TurretType tt, Player team){
+	public static Tower createTower(TurretType tt, Player team){
 		Spritable sp = Spritable.createSpritable();
 		sp.gameObject.AddComponent<Tower>();
 		Tower turret = sp.GetComponent<Tower>();
 		turret.init(tt, team);
+		turret.name = tt.ToString() + " Turret";
+		return turret;
 	}
 }

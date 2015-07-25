@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,12 +13,17 @@ public class Main : MonoBehaviour {
 
 	//public static Team[] teams = new Team[]{Team.Enemy, Team.Player};
 
+	private static Main instance;
+
 	public GUISkin hudSkin;
 
 	bool placeTowerGUIActive;
 	Rect towerPlacementPosition;
+	Vector3 towerWorldPos;
 
 	void init(){
+		instance = this;
+
 		Troop.troops = new Dictionary<Player, List<Troop>>();
 		foreach (Player t in Player.players){
 			Troop.troops[t] = new List<Troop>();
@@ -28,8 +34,10 @@ public class Main : MonoBehaviour {
 	void Start () {
 		init();
 
-		Tower.createTower(Tower.TurretType.gun, Player.human);
-		Troop.createTroop(Troop.TroopType.pistol, Player.computer).transform.position = new Vector3(5, 5, 0);
+		//Player.human.CreateTower(Tower.TurretType.gun);
+		//Player.computer.CreateTroop(Troop.TroopType.pistol).transform.position = new Vector3(5, 5, 0);
+
+		(new Level()).init();
 
 	}
 	
@@ -39,19 +47,39 @@ public class Main : MonoBehaviour {
 			p.update();
 		}
 
-		if (Input.GetMouseButtonDown(0)){
-			Vector3 worldPos = Camera.main.ViewportToWorldPoint(Input.mousePosition);
-			Debug.Log(worldPos);
-			startTowerPlacement(Input.mousePosition);
+		if (!placeTowerGUIActive && Input.GetMouseButtonDown(0)){
+			towerWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y, Mathf.Abs(transform.position.z)));
+			//Debug.Log(worldPos);
+			//startTowerPlacement(Input.mousePosition);
+		}
+
+		setUIVariables();
+	}
+
+	void setUIVariables(){
+		PowerUI.UI.Variables["money"] = "Money: " + Player.human.Money.ToString();
+		PowerUI.UI.Variables["income"] = "Income: " + Player.human.Income;
+		PowerUI.UI.Variables["supply"] = "Supply: " + Player.human.Supply;
+		PowerUI.UI.Variables["supplyIncome"] = "Supply Income: " + Player.human.SupplyIncome;
+
+		PowerUI.UI.Variables["towerPlacementMenu"] = "";
+
+		Array options = Enum.GetValues(typeof(Tower.TurretType));
+		
+		foreach (Tower.TurretType t in options){
+			Dictionary<Tower.AttributeType, float> atts = Tower.attributesList[t];
+			if (Player.human.Money >= atts[Tower.AttributeType.price]){
+				PowerUI.UI.Variables["towerPlacementMenu"] += "<div  onclick='finishTowerPlacement'>" + t.ToString() + "</div>";
+			}
 		}
 	}
 
 	void OnGUI(){
-		showHUD();
+		/*showHUD();
 
 		if (placeTowerGUIActive){
 			placeTowerGUI();
-		}
+		}*/
 	}
 
 	void showHUD(){
@@ -64,27 +92,14 @@ public class Main : MonoBehaviour {
 		});
 	}
 
-	void placeTowerGUI(){
-		GUI.Box(towerPlacementPosition, "Place a tower");
-
-		List<Tower.TurretType> options = new List<Tower.TurretType>();
-
-		int x = 0;
-		int y = 0;
-		int h = 0;
-		int w = 0;
-		int p = 0;
-
-		foreach (Tower.TurretType t in options){
-			Dictionary<AttributeType, float> atts = Tower.attributesList[t];
-			GUI.Label(new Rect(x, y, w, h), atts[Tower.AttributeType.price].ToString());
-		}
+	public void placeTower(){
+		Debug.Log("Fuck yeah");
 	}
 
 	void startTowerPlacement(Vector3 mousepos){
 		placeTowerGUIActive = true;
-		int w = 100;
-		int h = 100;
+		int w = 200;
+		int h = 200;
 		int p = 5;
 
 		mousepos = new Vector3(mousepos.x, Screen.height - mousepos.y, 0f);
@@ -106,5 +121,13 @@ public class Main : MonoBehaviour {
 		}
 
 		return res;
+	}
+
+	public static Main Instance
+	{
+		get 
+		{
+			return instance;
+		}
 	}
 }

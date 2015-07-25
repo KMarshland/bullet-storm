@@ -1,0 +1,67 @@
+<div onclick="startTowerPlacement" style="width:100%;height:100%">
+	<div class="top-menu">
+		<table class="info-table">
+			<tr>
+				<td>&money;</td>
+				<td>&income;</td>
+				<td>&supply;</td>
+				<td>&supplyIncome;</td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="tower-placement-menu">
+		<div onclick='finishTowerPlacement'>Hi</div>
+		&towerPlacementMenu;
+	</div>
+</div>
+
+
+
+<script type='text/nitro'>
+
+	var tpshowing:bool = false;
+	var towerPos:Vector2;
+	
+	function startTowerPlacement(e:UIEvent){
+		if (!tpshowing){
+			tpshowing = true;
+			var el:Element = document.getElementById("tower-placement-menu");
+			el.style.display = "block";
+			el.style.left = Input.MousePosition.x + "px";
+			el.style.top = Input.MousePosition.y + "px";
+			
+			towerPos = Input.MousePosition;
+		} else {
+			debug.log("Asshole");
+		}
+	}
+	
+	function finishTowerPlacement(e:UIEvent){
+		Main.Instance.placeTower();
+		
+		var el:Element = document.getElementById("tower-placement-menu");
+		el.style.display = "none";
+	}
+
+</script>
+
+<style>
+
+.top-menu{
+	padding-top: 5px;
+}
+
+.info-table{
+	text-align: center;
+	width: 100%;
+}
+
+#tower-placement-menu{
+	width: 200px;
+	background-color: #000000;
+	font-color: white;
+	display:none;
+}
+
+</style>

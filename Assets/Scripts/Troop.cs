@@ -108,6 +108,7 @@ public class Troop : Spritable {
 		Spritable s = createSpritable();
 		s.gameObject.AddComponent<Troop>();
 		Troop t = s.GetComponent<Troop>();
+		t.name = type.ToString () + " Troop";
 
 		t.init(type, team);
 		
