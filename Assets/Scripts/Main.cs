@@ -37,7 +37,7 @@ public class Main : MonoBehaviour {
 		//Player.human.CreateTower(Tower.TurretType.gun);
 		//Player.computer.CreateTroop(Troop.TroopType.pistol).transform.position = new Vector3(5, 5, 0);
 
-		Level.createLevel();
+		Level.createLevel(Level.LevelInstance.test);
 
 	}
 	

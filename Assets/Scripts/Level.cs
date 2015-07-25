@@ -14,7 +14,7 @@ public class Level : Spritable {
 
 	static Dictionary<LevelInstance, string> sprites = new Dictionary<LevelInstance, string>(){
 		{
-			LevelInstance.test, "GunTower"
+			LevelInstance.test, "TestMap"
 		}
 	};
 
