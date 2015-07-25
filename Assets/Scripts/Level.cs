@@ -27,7 +27,7 @@ public class Level : Spritable {
 	static Dictionary<LevelInstance, Vector3[]> nodeSets = new Dictionary<LevelInstance, Vector3[]>(){
 		{
 			LevelInstance.test, new Vector3[]{
-				new Vector3(0, 0, 0),
+				new Vector3(25, 3, 0),
 				new Vector3(0, 1, 0),
 				new Vector3(1, 1, 0),
 				new Vector3(1, 2, 0)
@@ -76,7 +76,16 @@ public class Level : Spritable {
 	
 	}
 
-	Vector3 positionAt(float percentage){
+	void OnDrawGizmosSelected () {
+		Gizmos.color = Color.red;
+
+		float resolution = 5000f;
+		for (int i = 0; i < resolution; i++) {
+			Gizmos.DrawLine(positionAt(i/resolution), positionAt((i + 1f)/resolution));
+		}
+	}
+
+	public Vector3 positionAt(float percentage){
 		float length = totalLength * percentage;
 		float key = 0f;
 		for (int i = orderedKeys.Count - 1; i >= 0; i--){
