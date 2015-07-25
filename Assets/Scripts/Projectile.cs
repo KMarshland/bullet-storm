@@ -9,7 +9,7 @@ public class Projectile : Spritable {
 	Vector3 dir;
 
 	static float extraRange = 1f;
-	static float speed = 0.1f;
+	static float speed = 1f;
 
 	void init(Tower t, Vector3 dest){
 		sourceTower = t;
