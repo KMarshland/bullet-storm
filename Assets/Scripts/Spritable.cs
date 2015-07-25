@@ -7,7 +7,7 @@ public class Spritable : MonoBehaviour {
 
 	Texture2D spriteImg;
 
-	SpriteRenderer sprite;
+	protected SpriteRenderer sprite;
 
 	// Use this for initialization
 	void Start () {

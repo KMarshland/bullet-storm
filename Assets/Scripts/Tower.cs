@@ -185,8 +185,9 @@ public class Tower : Spritable {
 	public void init(TurretType type, Player team){
 		turretType = type;
 		attributes = attributesList[type];
-		this.Costume = "Towers/" + sprites[type];
+		this.Costume = getSpriteUrl(type);
 		this.team = team;
+		sprite.sortingLayerName = "Tower";
 	}
 
 	// Use this for initialization
@@ -274,6 +275,10 @@ public class Tower : Spritable {
 		get {
 			return attributes;
 		}
+	}
+
+	public static string getSpriteUrl(TurretType tt){
+		return "Towers/" + sprites[tt];
 	}
 
 	public static Tower createTower(TurretType tt, Player team){

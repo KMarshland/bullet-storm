@@ -68,6 +68,8 @@ public class Level : Spritable {
 			orderedKeys.Add(totalLength);
 			totalLength += bez.Length;
 		}
+
+		sprite.sortingLayerName = "Map";
 	}
 
 	// Use this for initialization

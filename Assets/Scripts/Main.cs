@@ -17,9 +17,8 @@ public class Main : MonoBehaviour {
 
 	public GUISkin hudSkin;
 
-	bool placeTowerGUIActive;
-	Rect towerPlacementPosition;
-	Vector3 towerWorldPos;
+	bool placingTower;
+	Tower.TurretType currentTowerType;
 
 	void init(){
 		instance = this;
@@ -33,6 +32,8 @@ public class Main : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		init();
+
+		initializeUI ();
 
 		//Player.human.CreateTower(Tower.TurretType.gun);
 		//Player.computer.CreateTroop(Troop.TroopType.pistol).transform.position = new Vector3(5, 5, 0);
@@ -48,68 +49,81 @@ public class Main : MonoBehaviour {
 			p.update();
 		}
 
-		if (!placeTowerGUIActive && Input.GetMouseButtonDown(0)){
-			towerWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y, Mathf.Abs(transform.position.z)));
-			//Debug.Log(worldPos);
-			//startTowerPlacement(Input.mousePosition);
+		if (placingTower){
+
+			if (Input.GetMouseButtonDown(0)){
+				Vector3 towerWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(
+					Input.mousePosition.x,
+					Input.mousePosition.y, 
+					Mathf.Abs(transform.position.z)
+				));
+				finishPlacingTower(towerWorldPos);
+			}
 		}
 
-		setUIVariables();
+		updateUI();
 	}
 
-	void setUIVariables(){
-		PowerUI.UI.Variables["money"] = "Money: " + Player.human.Money.ToString();
-		PowerUI.UI.Variables["income"] = "Income: " + Player.human.Income;
-		PowerUI.UI.Variables["supply"] = "Supply: " + Player.human.Supply;
-		PowerUI.UI.Variables["supplyIncome"] = "Supply Income: " + Player.human.SupplyIncome;
-
-		PowerUI.UI.Variables["towerPlacementMenu"] = "";
-
+	void initializeUI(){
 		Array options = Enum.GetValues(typeof(Tower.TurretType));
 		
 		foreach (Tower.TurretType t in options){
-			Dictionary<Tower.AttributeType, float> atts = Tower.attributesList[t];
-			if (Player.human.Money >= atts[Tower.AttributeType.price]){
-				PowerUI.UI.Variables["towerPlacementMenu"] += "<div  onclick='finishTowerPlacement'>" + t.ToString() + "</div>";
-			}
+
+			var el = PowerUI.UI.document.createElement("div");
+			el.innerHTML = t.ToString();
+			el.className = "select-option";
+			el.parentNode = PowerUI.UI.document.getElementById("tower-list");
+
+			Tower.TurretType currentType = t;
+
+			el.OnClick += delegate(PowerUI.UIEvent uiEvent) {
+				Dictionary<Tower.AttributeType, float> atts = Tower.attributesList[currentType];
+				if (atts[Tower.AttributeType.price] <= Player.human.Money){
+					startTowerPlacement(currentType);
+				}
+			};
 		}
+		PowerUI.UI.document.getElementsByClassName ("inner-sidebar-container")[0].style.height = (Screen.height - 60) + "px";
+	}
+
+	void updateUI(){
+		PowerUI.UI.Variables["money"] = Player.human.Money.ToString();
+		PowerUI.UI.Variables["income"] =  Player.human.Income.ToString();
+		PowerUI.UI.Variables["supply"] = Player.human.Supply.ToString();
+		PowerUI.UI.Variables["supplyIncome"] = Player.human.SupplyIncome.ToString();
+
+		PowerUI.UI.Variables["sidebarHeight"] = (200).ToString();
 	}
 
 	void OnGUI(){
-		/*showHUD();
+		if (placingTower) {
 
-		if (placeTowerGUIActive){
-			placeTowerGUI();
-		}*/
+			Texture2D image = Resources.Load ("Sprites/" + Tower.getSpriteUrl (currentTowerType)) as Texture2D;
+
+			GUI.Label (
+				new Rect (
+					Input.mousePosition.x - (image.width)/2f, 
+					(Screen.height - Input.mousePosition.y) - (image.height)/2f, 
+					image.width, image.height
+				), 
+				image
+			);
+		}
 	}
 
-	void showHUD(){
-		GUI.skin = hudSkin;
-		GUI.Toolbar(new Rect(0, 0, Screen.width, 25), -1, new string[]{
-			"Money: " + Player.human.Money,
-			"Income: " + Player.human.Income,
-			"Supply: " + Player.human.Supply,
-			"Supply Income: " + Player.human.SupplyIncome,
-		});
+	void startTowerPlacement(Tower.TurretType turretType){
+		currentTowerType = turretType;
+		placingTower = true;
 	}
 
-	public void placeTower(){
-		Debug.Log("Fuck yeah");
-	}
+	void finishPlacingTower(Vector3 position){
+		placingTower = false;
+		Dictionary<Tower.AttributeType, float> atts = Tower.attributesList[currentTowerType];
+		if (atts[Tower.AttributeType.price] <= Player.human.Money){
+			Player.human.CreateTower (currentTowerType).transform.position = position;
+			Player.human.Money -= atts[Tower.AttributeType.price];
+		}
 
-	void startTowerPlacement(Vector3 mousepos){
-		placeTowerGUIActive = true;
-		int w = 200;
-		int h = 200;
-		int p = 5;
-
-		mousepos = new Vector3(mousepos.x, Screen.height - mousepos.y, 0f);
-
-		int x = (int)((mousepos.x + w + p) > Screen.width ? Screen.width - (w + p) : mousepos.x);
-		int y = (int)((mousepos.y + h + p) > Screen.height ? Screen.height - (h + p) : mousepos.y);
-
-		towerPlacementPosition = new Rect(x, y, w, h);
-		placeTowerGUIActive = true;
 	}
 
 	public static List<Player> enemiesOf(Player team){

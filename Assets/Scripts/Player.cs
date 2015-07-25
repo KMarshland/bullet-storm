@@ -31,6 +31,8 @@ public class Player {
 	public float Money {
 		get {
 			return money;
+		} set {
+			money = value;
 		}
 	}
 

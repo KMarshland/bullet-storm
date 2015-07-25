@@ -1,0 +1,85 @@
+
+
+<div onclick="startTowerPlacement" style="width:100%;height:100%">
+	<div class="sidebar">
+		<table class="info-table">
+			<tr>
+				<td>Money: &money;</td>
+				<td>+ &income;</td>
+			</tr>
+			<tr>
+				<td>Supply: &supply;</td>
+				<td>+ &supplyIncome;</td>
+			</tr>
+		</table>
+		
+		<div class="inner-sidebar-container">
+			<div class="inner-sidebar">
+				<div class="tower-placement">
+					<h2>
+						Towers
+					</h2>
+					
+					<div id="tower-list">
+					</div>
+				</div>
+				
+				<div class="trap-placement">
+					<h2>
+						Traps
+					</h2>
+					
+					<div id="trap-list">
+					</div>
+				</div>
+				
+				<div class="troop-select">
+					<h2>
+						Troops
+					</h2>
+					
+					<div id="troop-list">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script type='text/nitro'>
+
+</script>
+
+<style>
+
+.sidebar{
+	position: absolute;
+	left: 0px;
+	height: 100%;
+	width: 20%;
+	border-right: 4px solid black;
+	padding: 4px;
+	background-color: #faf9f0;
+	box-shadow: inset 0px 0px 0px 3px rgba(#fff, 0.8), 0px 3px 0px -2px rgba(#000, 0.1);
+	color: #000000;
+}
+
+.info-table{
+	text-align: center;
+	width: 100%;
+	padding-bottom: 3px;
+	border-bottom: 1px solid black;
+}
+
+.inner-sidebar-container{
+	height: 80%;
+}
+
+.inner-sidebar{
+	height: 100%;
+	overflow-y: scroll;
+}
+
+</style>
