@@ -69,10 +69,13 @@ public class Main : MonoBehaviour {
 		
 		foreach (Tower.TurretType t in options){
 
+			var parent = PowerUI.UI.document.getElementById("tower-list");
 			var el = PowerUI.UI.document.createElement("div");
-			el.innerHTML = t.ToString();
+
+			el.innerHTML = t.ToString().ToUpper();
+
 			el.className = "select-option";
-			el.parentNode = PowerUI.UI.document.getElementById("tower-list");
+			el.parentNode = parent;
 
 			Tower.TurretType currentType = t;
 
@@ -82,6 +85,8 @@ public class Main : MonoBehaviour {
 					startTowerPlacement(currentType);
 				}
 			};
+
+			parent.appendInnerHTML("<br />");
 		}
 		PowerUI.UI.document.getElementsByClassName ("inner-sidebar-container")[0].style.height = (Screen.height - 60) + "px";
 	}
