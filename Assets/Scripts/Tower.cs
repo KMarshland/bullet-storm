@@ -141,34 +141,34 @@ public class Tower : Spritable {
 
 	static Dictionary<TurretType, string> sprites = new Dictionary<TurretType, string>(){
 		{
-			TurretType.gun, "GunTowerBulletStorm"
+			TurretType.gun, "GunTower"
 		},
 		{
-			TurretType.artillery, "ArtilleryBulletStorm"
+			TurretType.artillery, "ArtilleryTower"
 		},
 		{
-			TurretType.blazeMachineGun, "BlazeM.GunBulletStorm"
+			TurretType.blazeMachineGun, "BlazeMachineGun"
 		},
 		{
-			TurretType.flamethrower, "FlamethrowerBulletStorm"
+			TurretType.flamethrower, "Flamethrower"
 		},
 		{
-			TurretType.gas, "PoisonGasBulletStorm"
+			TurretType.gas, "PoisonGasTower"
 		},
 		{
-			TurretType.glue, "GlueTowerBulletStorm"
+			TurretType.glue, "GlueTower"
 		},
 		{
-			TurretType.machinegun, "MachineGunBulletStorm"
+			TurretType.machinegun, "MachineGunTower"
 		},
 		{
-			TurretType.missile, "MissileBulletStorm"
+			TurretType.missile, "MissileTower"
 		},
 		{
-			TurretType.photon, "PhotonCannonBulletStorm"
+			TurretType.photon, "PhotonCannon"
 		},
 		{
-			TurretType.sword, "SwordTowerBulletStorm"
+			TurretType.sword, "SwordTower"
 		}
 
 	};
@@ -185,7 +185,7 @@ public class Tower : Spritable {
 	public void init(TurretType type, Player team){
 		turretType = type;
 		attributes = attributesList[type];
-		this.Costume = sprites[type];
+		this.Costume = "Towers/" + sprites[type];
 		this.team = team;
 	}
 

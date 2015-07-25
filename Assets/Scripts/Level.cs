@@ -2,7 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Level {
+public class Level : Spritable {
+
+	static Level current;
+
+	public enum LevelInstance {
+		test
+	}
+
+	static Dictionary<LevelInstance, Level> levels = new Dictionary<LevelInstance, Level>();
+
+	static Dictionary<LevelInstance, string> sprites = new Dictionary<LevelInstance, string>(){
+		{
+			LevelInstance.test, "GunTower"
+		}
+	};
 
 	string levelName;
 
@@ -12,7 +26,11 @@ public class Level {
 
 	float totalLength;
 
-	public void init(){
+	public void init(LevelInstance inst){
+		levels [inst] = this;
+
+		this.Costume = "Levels/" + sprites[inst];
+
 		//load the nodes
 		nodes = new Vector3[]{
 			new Vector3(0, 0, 0),
@@ -33,16 +51,7 @@ public class Level {
 			segments[totalLength] = bez;
 			orderedKeys.Add(totalLength);
 			totalLength += bez.Length;
-
-			var node = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			node.transform.position = nodes[i];
-			node.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 		}
-
-		for (int i = 0; i < 1000; i++) {
-			Debug.DrawLine(positionAt(i/1000f), positionAt((i + 1f)/1000f), Color.red, 100000f, false);
-		}
-		Debug.Log ("Complete");
 	}
 
 	// Use this for initialization
@@ -136,5 +145,32 @@ public class Level {
 					percentage * percentage * p2;
 		}
 
+	}
+
+	public static Level createLevel(LevelInstance inst){
+		if (levels.ContainsKey(inst)) {
+			return levels[inst];
+		}
+
+		Spritable sp = Spritable.createSpritable();
+		sp.gameObject.AddComponent<Level>();
+		Level lev = sp.GetComponent<Level>();
+		lev.init (inst);
+
+		lev.gameObject.SetActive (false);
+
+		return lev;
+	}
+
+	public static Level Current {
+		get {
+			return current;
+		} set {
+			if (current != null){
+				current.gameObject.SetActive (false);
+			}
+			current = value;
+			current.gameObject.SetActive (true);
+		}
 	}
 }
