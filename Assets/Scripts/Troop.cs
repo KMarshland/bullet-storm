@@ -41,17 +41,26 @@ public class Troop : Spritable {
 		}
 	};
 
-	Dictionary<TroopAttributeType, float> attributes = new Dictionary<TroopAttributeType, float>();
+	const float speedCorrectionFactor = 0.01f;
+
+	Dictionary<TroopAttributeType, float> attributes = new Dictionary<TroopAttributeType, float>(){};
 
 	public float health;
 	Player team;
+	Level level;
+
+	float distanceTraveled;
 	
-	public void init(TroopType type, Player team){
+	public void init(TroopType type, Player team, Level.LevelInstance level){
 		attributes = attributesList[type];
 		health = attributes[TroopAttributeType.baseHealth];
 		this.team = team;
+		this.level = Level.getLevel (level);
 
 		Troop.troops[team].Add(this);
+
+		transform.position = pointAt (0f);
+		distanceTraveled = 0f;
 	}
 
 	// Use this for initialization
@@ -61,7 +70,24 @@ public class Troop : Spritable {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		distanceTraveled += this.attributes [TroopAttributeType.movementSpeed] * speedCorrectionFactor;
+		if (distanceTraveled > level.TotalLength) {
+			Debug.Log("Reached end");
+			die ();
+			return;
+		}
+
+		//Debug.Log (distanceTraveled);
+
+		transform.position = pointAlong (distanceTraveled);
+	}
+
+	Vector3 pointAt(float percentage){
+		return level.pointAt(percentage, team.Direction);
+	}
+
+	Vector3 pointAlong(float distance){
+		return level.pointAlong(distance, team.Direction);
 	}
 
 	public void beDamagedBy(Projectile p){
@@ -103,14 +129,14 @@ public class Troop : Spritable {
 		}
 	}
 
-	public static Troop createTroop(Troop.TroopType type, Player team){
+	public static Troop createTroop(Troop.TroopType type, Player team, Level.LevelInstance level){
 		
 		Spritable s = createSpritable();
 		s.gameObject.AddComponent<Troop>();
 		Troop t = s.GetComponent<Troop>();
 		t.name = type.ToString () + " Troop";
 
-		t.init(type, team);
+		t.init(type, team, level);
 		
 		t.Costume = "BlueCircle";
 		

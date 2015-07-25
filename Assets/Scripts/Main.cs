@@ -31,23 +31,22 @@ public class Main : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		init();
-
+		init ();
 		initializeUI ();
-
-		//Player.human.CreateTower(Tower.TurretType.gun);
-		//Player.computer.CreateTroop(Troop.TroopType.pistol).transform.position = new Vector3(5, 5, 0);
-
 		Level.createAll ();
 
 		Level.Current = Level.LevelInstance.test;
+
+		//Player.human.CreateTower(Tower.TurretType.gun);
+
+		Player.computer.CreateTroop(Troop.TroopType.pistol);
+
+
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		foreach (Player p in Player.players){
-			p.update();
-		}
+		Player.updateAll();
 
 		if (placingTower){
 

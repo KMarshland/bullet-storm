@@ -10,6 +10,11 @@ public class Level : Spritable {
 		test
 	}
 
+	public enum Direction{
+		positive,
+		negative
+	}
+
 	static Dictionary<LevelInstance, Level> levels = new Dictionary<LevelInstance, Level>();
 
 	static Dictionary<LevelInstance, string> sprites = new Dictionary<LevelInstance, string>(){
@@ -45,7 +50,7 @@ public class Level : Spritable {
 	Dictionary<float, BezierSegment> segments;
 	List<float> orderedKeys;
 
-	float totalLength;
+	public float totalLength;
 
 	public void init(LevelInstance inst){
 		levels [inst] = this;
@@ -82,16 +87,41 @@ public class Level : Spritable {
 	
 	}
 
-	void OnDrawGizmos () {
+	void OnDrawGizmosSelected () {
 		Gizmos.color = Color.red;
 
 		float resolution = 5000f;
 		for (int i = 0; i < resolution; i++) {
-			Gizmos.DrawLine(positionAt(i/resolution), positionAt((i + 1f)/resolution));
+			Gizmos.DrawLine(pointAt(i/resolution), pointAt((i + 1f)/resolution));
 		}
 	}
 
-	public Vector3 positionAt(float percentage){
+	public Vector3 pointAlong(float distance){
+		return pointAlong (distance, Direction.positive);
+	}
+
+	public Vector3 pointAlong(float distance, Direction direction){
+		float percentage = distance/totalLength;
+
+		if (direction == Direction.negative) {
+			percentage = (1f - percentage);
+		}
+		
+		return pointAt(percentage);
+	}
+
+	public Vector3 pointAt(float percentage, Direction direction){
+		if (direction == Direction.positive) {
+			return pointAt(percentage);
+		} else if (direction == Direction.negative) {
+			return pointAt(1f - percentage);
+		}
+
+		return new Vector3 (0, 0, 0);
+	}
+
+	public Vector3 pointAt(float percentage){
+
 		float length = totalLength * percentage;
 		float key = 0f;
 		for (int i = orderedKeys.Count - 1; i >= 0; i--){
@@ -101,10 +131,18 @@ public class Level : Spritable {
 			}
 		}
 
-		return segments [key].pointAt (length - key);
+		return segments [key].PointAlong (length - key);
+	}
+
+	public float TotalLength {
+		get {
+			return totalLength;
+		}
 	}
 
 	struct BezierSegment {
+		const int chunks = 1000;//how good your approximation is
+
 		Vector3 p0, p1, p2;
 
 		float length;
@@ -131,12 +169,11 @@ public class Level : Spritable {
 			//there's pretty much no way to do that integral in a decent timeframe. 
 			//Approximate it with a midpoint reimann sum
 
-			int chunks = 100;//how good your approximation is
 			float columnWidth = 1f/chunks;
 
 			float sum = 0;
 			for (int chunk = 0; chunk < chunks; chunk++){
-				sum += rootFPrime(columnWidth * chunk + columnWidth/2f).magnitude;
+				sum += rootFPrime(columnWidth * chunk + columnWidth/2f).magnitude * columnWidth;
 			}
 			length = sum;
 		}
@@ -159,11 +196,11 @@ public class Level : Spritable {
 			}
 		}
 
-		public Vector3 pointAt(float lengthAlong){
-			return GetPoint (lengthAlong / Length);
+		public Vector3 PointAlong(float lengthAlong){
+			return PointAt (lengthAlong / Length);
 		}
 
-		public Vector3 GetPoint(float percentage) {//t is the percentage of the way through the curve
+		public Vector3 PointAt(float percentage) {//t is the percentage of the way through the curve
 			percentage = Mathf.Clamp01(percentage);
 			float oneMinusT = 1f - percentage;
 			return
@@ -194,6 +231,10 @@ public class Level : Spritable {
 		lev.gameObject.SetActive (false);
 
 		return lev;
+	}
+
+	public static Level getLevel(LevelInstance inst){
+		return levels [inst];
 	}
 
 	public static LevelInstance Current {
