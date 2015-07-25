@@ -27,10 +27,14 @@ public class Level : Spritable {
 	static Dictionary<LevelInstance, Vector3[]> nodeSets = new Dictionary<LevelInstance, Vector3[]>(){
 		{
 			LevelInstance.test, new Vector3[]{
-				new Vector3(25, 3, 0),
-				new Vector3(0, 1, 0),
-				new Vector3(1, 1, 0),
-				new Vector3(1, 2, 0)
+				new Vector3(-25f, -3f, 0),
+				new Vector3(-17.25f, -2.25f, 0),
+				new Vector3(-18f, 14f, 0),
+				new Vector3(-6f, 14f, 0),
+				new Vector3(-8f, -9f, 0),
+				new Vector3(7.5f, -8f, 0),
+				new Vector3(7f, 4f, 0),
+				new Vector3(25, 3f, 0)
 			}
 		}
 	};
@@ -76,7 +80,7 @@ public class Level : Spritable {
 	
 	}
 
-	void OnDrawGizmosSelected () {
+	void OnDrawGizmos () {
 		Gizmos.color = Color.red;
 
 		float resolution = 5000f;
