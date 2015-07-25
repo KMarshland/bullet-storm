@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Level : Spritable {
 
-	static Level current;
+	static LevelInstance current;
 
 	public enum LevelInstance {
 		test
@@ -15,6 +15,23 @@ public class Level : Spritable {
 	static Dictionary<LevelInstance, string> sprites = new Dictionary<LevelInstance, string>(){
 		{
 			LevelInstance.test, "TestMap"
+		}
+	};
+
+	static Dictionary<LevelInstance, string> names = new Dictionary<LevelInstance, string>(){
+		{
+			LevelInstance.test, "Test"
+		}
+	};
+
+	static Dictionary<LevelInstance, Vector3[]> nodeSets = new Dictionary<LevelInstance, Vector3[]>(){
+		{
+			LevelInstance.test, new Vector3[]{
+				new Vector3(0, 0, 0),
+				new Vector3(0, 1, 0),
+				new Vector3(1, 1, 0),
+				new Vector3(1, 2, 0)
+			}
 		}
 	};
 
@@ -29,15 +46,10 @@ public class Level : Spritable {
 	public void init(LevelInstance inst){
 		levels [inst] = this;
 
+		//load the configuration stuff
 		this.Costume = "Levels/" + sprites[inst];
-
-		//load the nodes
-		nodes = new Vector3[]{
-			new Vector3(0, 0, 0),
-			new Vector3(0, 1, 0),
-			new Vector3(1, 1, 0),
-			new Vector3(1, 2, 0)
-		};
+		this.levelName = names[inst];
+		nodes = nodeSets[inst];
 
 		segments = new Dictionary<float, BezierSegment> ();
 		orderedKeys = new List<float> ();
@@ -147,6 +159,13 @@ public class Level : Spritable {
 
 	}
 
+	public static void createAll(){
+		var insts = System.Enum.GetValues(typeof(LevelInstance));
+		foreach (LevelInstance inst in insts){
+			Level.createLevel(inst);
+		}
+	}
+
 	public static Level createLevel(LevelInstance inst){
 		if (levels.ContainsKey(inst)) {
 			return levels[inst];
@@ -162,15 +181,15 @@ public class Level : Spritable {
 		return lev;
 	}
 
-	public static Level Current {
+	public static LevelInstance Current {
 		get {
 			return current;
 		} set {
 			if (current != null){
-				current.gameObject.SetActive (false);
+				levels[current].gameObject.SetActive (false);
 			}
 			current = value;
-			current.gameObject.SetActive (true);
+			levels[current].gameObject.SetActive (true);
 		}
 	}
 }
